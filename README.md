@@ -5,7 +5,7 @@ Scripts used for performing methylation QTL mapping
 This repository contains scripts for performing QTL mapping analysis using Short Tandem Repeats (STR) genotypes and genome-wide DNA methylation profiling generated from PCR-free Illumina sequencing using [HipSTR](https://github.com/HipSTR-ToolHipSTR) and the Illumina Infinium MethylationEPIC array.
 
 ### Genotyping of tandem repeats
-Genotypes were generated for STRs included in HipSTR-references. Resulting genotypes were then filtered using default parameters as indicated in HipSTR-tool, and only STRs fulfilling the criteria listed below were selected for downstream analysis. 
+Genotypes were generated for STRs included in [HipSTR-references](https://github.com/HipSTR-Tool/HipSTR-references). Resulting genotypes were then filtered using default parameters as indicated in [HipSTR-tool](https://hipstr-tool.github.io/HipSTR/#default-filtering), and only STRs fulfilling the criteria listed below were selected for downstream analysis. 
 
 •	a minimum genotyping rate of ≥50%
 
@@ -17,9 +17,9 @@ Genotypes were generated for STRs included in HipSTR-references. Resulting genot
 
 ### Quality Control
 
-Quality control (QC) of DNA methylation measurements (beta (β) values)and HipSTR genotypes were based on Principal Component Analysis (PCA) and density plots of β values and repeat length (average of allelic size), respectively. 
+Quality control (QC) of DNA methylation measurements (beta (β) values) and HipSTR genotypes were based on Principal Component Analysis (PCA) and density plots of β values and repeat length (average of allelic size), respectively. 
 
-•	PCA was generated using prcomp function in R and outlier samples were removed   based on PCs by manual inspection. 
+•	PCA was generated using prcomp function in R and outlier samples were removed based on PCs by manual inspection. 
 
 •	Density plots were generated using density function and outlier from the distribution were removed.
 
@@ -34,9 +34,10 @@ Quality control (QC) of DNA methylation measurements (beta (β) values)and HipST
 
 Resulting associations were then filtered based on the number of observations per pairwise comparison, i.e, STR:CpG or STR:gene) and Bonferroni correction was applied to account for multiple testing using p.adjust function in R 
 
-### Additional analysis 
-•	Fine-mapping of identified mSTRs. Identified mSTRs were fine-mapped against local SNVs using CAVIAR.
+### Additional analysis
+
+•	Fine-mapping of identified mSTRs. Identified mSTRs were fine-mapped against local SNVs using [CAVIAR](https://github.com/fhormoz/caviar).
 
 •	Linkage disequilibrium (LD) between STRs and local SNVs (±250kb). Local LD between STR genotypes (average allelic size) and SNV dosages (alternate allele content, ie., homozygous for reference allele 0, heterozygous 1 and homozygous for alternate allele 2) were computed using lm function in R. 
 
-•	Population Stratification of alleles.
+•	Population Stratification of alleles. 
