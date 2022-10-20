@@ -13,7 +13,7 @@ Genotypes were generated for STRs included in HipSTR-references. Resulting genot
 
 •	≥3 observed alleles across the tested cohort
 
-•	non-modal allele frequency (NMAF) ≥0.1, i.e. the frequency of the ** major allele <0.9.
+•	non-modal allele frequency (NMAF) ≥0.1, i.e. the frequency of the major allele <0.9.
 
 ### Quality Control
 
