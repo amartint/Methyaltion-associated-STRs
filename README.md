@@ -38,6 +38,6 @@ Resulting associations were then filtered based on the number of observations pe
 
 •	Fine-mapping of identified mSTRs. Identified mSTRs were fine-mapped against local SNVs using [CAVIAR](https://github.com/fhormoz/caviar).
 
-•	Linkage disequilibrium (LD) between STRs and local SNVs (±250kb). Local LD between STR genotypes (average allelic size) and SNV dosages (alternate allele content, ie., homozygous for reference allele 0, heterozygous 1 and homozygous for alternate allele 2) were computed using lm function in R. 
+•	Linkage disequilibrium (LD) between STRs and local SNVs (±250kb). Local LD between STR genotypes (average allelic size) and SNV dosages (alternate allele content, _i.e._ homozygous for reference allele 0, heterozygous 1 and homozygous for alternate allele 2) were computed using lm function in R. 
 
 •	Population Stratification of alleles. [Redon _et al._](https://www.nature.com/articles/nature05329)
