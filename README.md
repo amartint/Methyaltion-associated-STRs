@@ -1,13 +1,13 @@
 # Methylation associated STRs
-Scripts used for performing methylation QTL mapping using STR genotypes
+Scripts used for performing methylation QTL mapping using STR genotypes.
 
 ## QTL mapping of STRs associated with DNA methylation levels (mSTRs)
 This repository contains scripts for performing QTL mapping analysis using Short Tandem Repeats (STR) genotypes and genome-wide DNA methylation profiling generated from PCR-free Illumina sequencing using [HipSTR](https://github.com/HipSTR-ToolHipSTR) and the Illumina Infinium MethylationEPIC array.
 
 ### Genotyping of tandem repeats
-Genotypes were generated for STRs included in [HipSTR-references](https://github.com/HipSTR-Tool/HipSTR-references). Resulting genotypes were then filtered using default parameters as indicated in [HipSTR-tool](https://hipstr-tool.github.io/HipSTR/#default-filtering), and only STRs fulfilling the criteria listed below were selected for downstream analysis. 
+Genotypes were generated for STRs included in [HipSTR-references](https://github.com/HipSTR-Tool/HipSTR-references). Resulting genotypes were then filtered using default parameters as indicated in [HipSTR-tool](https://hipstr-tool.github.io/HipSTR/#default-filtering), and selected according to the listed criteria
 
-•	a minimum genotyping rate of ≥50%
+•	minimum genotyping rate of ≥50%
 
 •	motif length of ≥2 bp
 
@@ -21,13 +21,14 @@ Quality control (QC) of DNA methylation measurements (beta (β) values) and HipS
 
 •	PCA was generated using prcomp function in R and outlier samples were removed based on PCs by manual inspection. 
 
-•	Density plots were generated using density function and outlier from the distribution were removed.
+•	Density plots were generated using density function and outliers from the distribution were removed.
 
 ### Additional QC steps
 
 •	Removing low variance DNA methylation levels (standard deviation β values >0.02 across samples)
 
 ### QTL mapping
+
 •	Methylation: Association test between HipSTR-derived genotypes and β values was performed using lm function in R.
 
 •	Expression: Association test between HipSTR-derived genotypes and gene expression levels (RNA sequencing) was performed using lm function in R. 
@@ -40,4 +41,4 @@ Resulting associations were then filtered based on the number of observations pe
 
 •	Linkage disequilibrium (LD) between STRs and local SNVs (±250kb). Local LD between STR genotypes (average allelic size) and SNV dosages (alternate allele content, _i.e._ homozygous for reference allele 0, heterozygous 1 and homozygous for alternate allele 2) were computed using lm function in R. 
 
-•	Population Stratification of alleles. [Redon _et al._](https://www.nature.com/articles/nature05329)
+•	Population Stratification of STR genotypes with the Vst statistic ([Redon _et al._](https://www.nature.com/articles/nature05329)).
