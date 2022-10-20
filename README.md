@@ -1,5 +1,5 @@
 # Methylation associated STRs
-Scripts used for performing methylation QTL mapping
+Scripts used for performing methylation QTL mapping using STR genotypes
 
 ## QTL mapping of STRs associated with DNA methylation levels (mSTRs)
 This repository contains scripts for performing QTL mapping analysis using Short Tandem Repeats (STR) genotypes and genome-wide DNA methylation profiling generated from PCR-free Illumina sequencing using [HipSTR](https://github.com/HipSTR-ToolHipSTR) and the Illumina Infinium MethylationEPIC array.
