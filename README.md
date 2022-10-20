@@ -40,4 +40,4 @@ Resulting associations were then filtered based on the number of observations pe
 
 •	Linkage disequilibrium (LD) between STRs and local SNVs (±250kb). Local LD between STR genotypes (average allelic size) and SNV dosages (alternate allele content, ie., homozygous for reference allele 0, heterozygous 1 and homozygous for alternate allele 2) were computed using lm function in R. 
 
-•	Population Stratification of alleles. 
+•	Population Stratification of alleles. [Redon _et al._](https://www.nature.com/articles/nature05329)
