@@ -1,4 +1,4 @@
-# Methyaltion-associated-STRs
+# Methylation associated STRs
 Scripts used for performing methylation QTL mapping
 
 ## QTL mapping of STRs associated with DNA methylation levels (mSTRs)
