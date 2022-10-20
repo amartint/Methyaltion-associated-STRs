@@ -1,7 +1,4 @@
 
-
-
-
 cat (paste0("\n", Sys.Date(),"\n"))
 cat(paste0("R version: ",getRversion()),"\n")
 
