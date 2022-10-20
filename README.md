@@ -2,10 +2,10 @@
 Scripts used for performing methylation QTL mapping using STR genotypes.
 
 ## QTL mapping of STRs associated with DNA methylation levels (mSTRs)
-This repository contains scripts for performing QTL mapping analysis using Short Tandem Repeats (STR) genotypes and genome-wide DNA methylation profiling generated from PCR-free Illumina sequencing using [HipSTR](https://github.com/HipSTR-ToolHipSTR) and the Illumina Infinium MethylationEPIC array.
+This repository contains scripts for performing QTL mapping analysis using Short Tandem Repeats (STR) genotypes and genome-wide DNA methylation profiling generated from PCR-free Illumina sequencing using **[HipSTR](https://github.com/HipSTR-ToolHipSTR)** and the Illumina Infinium MethylationEPIC array.
 
 ### Genotyping of tandem repeats
-Genotypes were generated for STRs included in [HipSTR-references](https://github.com/HipSTR-Tool/HipSTR-references). Resulting genotypes were then filtered using default parameters as indicated in [HipSTR-tool](https://hipstr-tool.github.io/HipSTR/#default-filtering), and selected according to the listed criteria
+Genotypes were generated for STRs included in **[HipSTR-references](https://github.com/HipSTR-Tool/HipSTR-references)**. Resulting genotypes were then filtered using default parameters as indicated in **[HipSTR-tool](https://hipstr-tool.github.io/HipSTR/#default-filtering)**, and selected according to the listed criteria
 
 •	minimum genotyping rate of ≥50%
 
@@ -37,8 +37,8 @@ Resulting associations were then filtered based on the number of observations pe
 
 ### Additional analysis
 
-•	Fine-mapping of identified mSTRs. Identified mSTRs were fine-mapped against local SNVs using [CAVIAR](https://github.com/fhormoz/caviar).
+•	Fine-mapping of identified mSTRs. Identified mSTRs were fine-mapped against local SNVs using **[CAVIAR](https://github.com/fhormoz/caviar)**.
 
 •	Linkage disequilibrium (LD) between STRs and local SNVs (±250kb). Local LD between STR genotypes (average allelic size) and SNV dosages (alternate allele content, _i.e._ homozygous for reference allele 0, heterozygous 1 and homozygous for alternate allele 2) were computed using lm function in R. 
 
-•	Population Stratification of STR genotypes with the Vst statistic ([Redon _et al._](https://www.nature.com/articles/nature05329)).
+•	Population Stratification of STR genotypes with the Vst statistic (**[Redon _et al._](https://www.nature.com/articles/nature05329)**).
