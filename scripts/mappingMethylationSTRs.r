@@ -94,7 +94,8 @@ for (i in 1:length (probes)) {
 	write.table(dat,SAVENAME,append = T,quote = F,sep = "\t", row.names = F,col.names = F)
 	
 	rm (x,dat, CpG,STR,NumberOfProbes,intersept, Slope_repeatUnits,Rsquared,LinRegP,Pair.obs,tobj)
-} # end of loop fer [probes]
+} 
+
 
 cat ("The end\n")	
 
