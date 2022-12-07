@@ -97,6 +97,5 @@ for (i in 1:length (probes)) {
 	rm (x,dat, CpG,STR,NumberOfProbes,intersept, Slope_repeatUnits,Rsquared,LinRegP,Pair.obs,tobj)
 } 
 
-
 cat ("The end\n")	
 
