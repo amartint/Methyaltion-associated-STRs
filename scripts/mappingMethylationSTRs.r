@@ -15,9 +15,9 @@ suppressPackageStartupMessages(library(argparse))
 suppressPackageStartupMessages(library(stats))
 suppressPackageStartupMessages(library(bedr))
 
-#############################################################
+############################################################################################################################################
 #	Set variables 
-#############################################################
+############################################################################################################################################
 
 # create parser object and specify our desired options 
 parser <- ArgumentParser()
@@ -40,9 +40,9 @@ LoadName <- paste0(MYREGION,".txt")
 SaveName <- paste0(DIROUT,MYREGION,".LinReg.txt")
 
 
-#############################################################
+#############################################################################################################################################
 #	Loading Files 
-#############################################################
+############################################################################################################################################
 
 setwd (MYDIR)
 if (file.exists(SaveName)) { unlink(SaveName);print.noquote (paste0("Deleting ",SaveName))}
@@ -50,9 +50,9 @@ if (file.exists(SaveName)) { unlink(SaveName);print.noquote (paste0("Deleting ",
 print.noquote (paste0("Loading ", LoadName))
 df<- fread (LoadName, sep="\t", check.names =F, header = T) # file containing meth and genotypes ("avg_repeats") per sample and CpG:STR. required columns: regionID,sampleID, ,probeID,sampleID, methylation, genotypes)
 
-#############################################################
+############################################################################################################################################
 #	Regression data using residuals
-#############################################################				         
+############################################################################################################################################				         
 cat (paste0( "Running associations\n"))
 #create an empty file
 names = c("STR","NumberOfProbes","ProbeID","Pair.obs","intersept","Slope_repeatUnits","Rsquared", "LinRegP")
