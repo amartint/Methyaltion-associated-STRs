@@ -1,6 +1,5 @@
-
 cat (paste0("\n", Sys.Date(),"\n"))
-cat(paste0("R version: ",getRversion()),"\n")
+cat (paste0("R version: ",getRversion(),"\n"))
 
 ############################################################################################################################################
 #	Loading libraries
@@ -13,23 +12,20 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(scales))
 suppressPackageStartupMessages(library(argparse))
 suppressPackageStartupMessages(library(stats))
-suppressPackageStartupMessages(library(bedr))
 
-############################################################################################################################################
+#############################################################
 #	Set variables 
-############################################################################################################################################
+#############################################################
 
 # create parser object and specify our desired options 
 parser <- ArgumentParser()
 parser$add_argument("-d", "--dir", help="your working directory")
-parser$add_argument("-q", "--chr", help="chromosome")  
-parser$add_argument("-s", "--str", help="file containing str genotypes and normalized methylation data for a given STR and CpGs present in its flanks")  
+parser$add_argument("-s", "--str", help="file containing STR genotypes and residuals obtained from adjusting methylation vales of a CpGs present in its flanks")  
 args <- parser$parse_args()
 
 # set variables 
 cat (paste0("Arguments:\n"))
 MYDIR=args$dir; cat (paste0(" \tWorking directory): ", MYDIR, "\n"))
-MYCHROM=args$chr; cat (paste0(" \tchromosome: ", MYCHROM, "\n"))
 MYREGION=args$str; cat (paste0(" \tRegion: ", MYREGION, "\n"))
 
 
@@ -40,20 +36,19 @@ LoadName <- paste0(MYREGION,".txt")
 SaveName <- paste0(DIROUT,MYREGION,".LinReg.txt")
 
 
-#############################################################################################################################################
+#############################################################
 #	Loading Files 
-############################################################################################################################################
+#############################################################
 
 setwd (MYDIR)
 if (file.exists(SaveName)) { unlink(SaveName);print.noquote (paste0("Deleting ",SaveName))}
          
 print.noquote (paste0("Loading ", LoadName))
-df<- fread (LoadName, sep="\t", check.names =F, header = T) # file containing meth and genotypes ("avg_repeats") per sample and CpG:STR. required columns: regionID,sampleID, ,probeID,sampleID, methylation, genotypes)
+df<- fread (LoadName, sep="\t", check.names =F, header = T) # file containing meth and STR genotypes per sample and CpG:STR. Required columns: strID,sampleID,probeID, methylation residuals (value), STR genotype (avg_repeats)))
 
-############################################################################################################################################
+#############################################################
 #	Regression data using residuals
-############################################################################################################################################
-
+#############################################################				         
 cat (paste0( "Running associations\n"))
 #create an empty file
 names = c("STR","NumberOfProbes","ProbeID","Pair.obs","intersept","Slope_repeatUnits","Rsquared", "LinRegP")
@@ -66,10 +61,10 @@ for (i in 1:length (probes)) {
 	x <- df %>% filter (ProbeID == probes[i])
 
 	CpG <- unique(x$ProbeID)
-	STR <- unique(x$regionId)
+	STR <- unique(x$strID)
 	NumberOfProbes <- length(unique(df$ProbeID))
 	
-	tobj = try (fit <- summary(lm(value ~ avg_repeats, data=x)),silent = TRUE)
+	tobj = try (fit <- summary(lm(value ~ avg_repeats, data=x)),silent = TRUE) # value =residuals obtained from methylation; avg_repeats for STR genotype
 	if(is(tobj,"try-error")) 
 	{
 		cat("... error ....\t")
@@ -97,5 +92,7 @@ for (i in 1:length (probes)) {
 	rm (x,dat, CpG,STR,NumberOfProbes,intersept, Slope_repeatUnits,Rsquared,LinRegP,Pair.obs,tobj)
 } 
 
+
 cat ("The end\n")	
+
 
