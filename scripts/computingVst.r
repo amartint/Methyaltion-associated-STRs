@@ -1,8 +1,7 @@
 
 
-
 cat (paste0("\n", Sys.Date(),"\n"))
-cat(paste0("R version: ",getRversion()),"\n")
+cat (paste0("R version: ",getRversion(),"\n"))
 
 ############################################################################################################################################
 #	Loading libraries
@@ -24,12 +23,12 @@ suppressPackageStartupMessages(library(stats))
 # create parser object and specify our desired options 
 parser <- ArgumentParser()
 parser$add_argument("-d", "--directory", help="your working directory")
-parser$add_argument("-i", "--input", help="file containing allelic genotypes of STR. Required: SampleID, str allele1 , allele2, ancestry of the sample")  
+parser$add_argument("-i", "--input", help="file containing allelic genotypes of STR. Required: SampleID, str_allele1 ,  str_allele2, Superpopulation")  
 args <- parser$parse_args()
 
 # set variables 
 cat (paste0("Arguments:\n"))
-MYDIR=args$directory; cat (paste0(" \tWorking directory): ", MYDIR, "\n"))
+MYDIR=args$directory; cat (paste0(" \tWorking directory: ", MYDIR, "\n"))
 MYINPUT=args$input; cat (paste0(" \tInput: ", MYINPUT, "\n"))
 DIROUT = paste0(MYDIR, "/vst/"); if (!file.exists(DIROUT)){dir.create(DIROUT)} 
 SAVENAME= paste0(DIROUT,gsub (".txt",".vst.txt",MYINPUT))
@@ -40,11 +39,12 @@ SAVENAME= paste0(DIROUT,gsub (".txt",".vst.txt",MYINPUT))
 ############################################################################################################################################
 
 cat (paste0("... Loading file \n"))
-df <- fread (paste0(MYINPUT , ".txt"), sep = "\t", check.names = F, header =T)
+df <- fread (MYINPUT, sep = "\t", check.names = F, header =T) %>% as.data.frame
 
 cat (paste0("... preparing file: arranging str_allele1 and str_allele2 in a single column \n"))
 df <- df %>% filter (!is.na ( str_allele1)) %>%  filter (!is.na ( str_allele2)) %>%
-		mutate (toremove = paste0( str_allele1,";", str_allele2)) %>% separate_rows (toremove, sep =";",convert =TRUE)  %>% 
+		mutate (toremove = paste0( str_allele1,";", str_allele2)) %>% 
+		separate_rows (toremove, sep =";",convert =TRUE) %>% 
 		dplyr::rename (repeats = toremove) %>% as.data.frame  # if required: number of copies can be rounded. 
 
 
@@ -68,14 +68,15 @@ pop <- unique (df$Superpopulation)
 for (i in 1:length (regions)) {
 	cat (paste0(i ," ...", regions[i], "\n"))
 	y = df %>% filter (STRId ==regions[i]) %>% filter (!is.na (repeats)) %>% as.data.frame
+	N_alleles <- nrow(y)
 	attach (y)
-	Va = round (var(y$repeats, na.rm=FALSE),4) 							  #calculate variance of the alleles across all samples
+	Va = round (var(y$repeats, na.rm=FALSE),4) 							  	# calculate variance of the alleles across all samples
 	for (j in 1:length (pop)) {
-		if ( nrow (y %>% filter (Superpopulation==pop[j])) >= 100) 			# filter for samples
+		if ( nrow (y %>% filter (Superpopulation==pop[j])) >= 200) 			# filter for number of samples (100)
 		{
-			n  = length (y[Superpopulation==pop[j],]$repeats)
-			Vt =  var(y[Superpopulation == pop[j],]$repeats, na.rm=FALSE)  # variance for each STR across target population
-			Vb = var(y[Superpopulation != pop[j],]$repeats, na.rm=FALSE)   # variance for each STR across background population ( whole set population - background)
+			n  = length (y[Superpopulation==pop[j],]$repeats)				# number of alleles
+			Vt = var (y[Superpopulation == pop[j],]$repeats, na.rm=FALSE)   # variance for each STR across target population
+			Vb = var (y[Superpopulation != pop[j],]$repeats, na.rm=FALSE)   # variance for each STR across background population ( whole set population - target)
 			Ct = round(n/N_alleles, 4)										# fraction target/whole set of population
 			Cb = round(1 - Ct,4)
 			VST =round((Va -((Ct *Vt )+(Cb * Vb )))/Va,4)
