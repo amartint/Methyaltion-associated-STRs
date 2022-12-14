@@ -1,8 +1,5 @@
-
-
-
 cat (paste0("\n", Sys.Date(),"\n"))
-cat(paste0("R version: ",getRversion()),"\n")
+cat (paste0("R version: ",getRversion(),"\n"))
 
 ############################################################################################################################################
 #	Loading libraries
@@ -25,12 +22,12 @@ suppressPackageStartupMessages(library(broom))
 # create parser object and specify our desired options 
 parser <- ArgumentParser()
 parser$add_argument("-d", "--directory", help="your working directory")
-parser$add_argument("-i", "--input", help="file containing genotypes of STR and SNVs located <250Kb of the STRs. Required: SampleID, str genotype , SNV genotypes")  
+parser$add_argument("-i", "--input", help="file containing genotypes for a given STR and SNVs located <250 kb of the tested STR. Required: SampleID, STRId,SNVId,STR genotype (avg_repeats) ,SNV genotype (value)")  
 args <- parser$parse_args()
 
 # set variables 
 cat (paste0("Arguments:\n"))
-MYDIR=args$directory; cat (paste0(" \tWorking directory): ", MYDIR, "\n"))
+MYDIR=args$directory; cat (paste0(" \tWorking directory: ", MYDIR, "\n"))
 MYINPUT=args$input; cat (paste0(" \tInput: ", MYINPUT, "\n"))
 SAVENAME= gsub (".txt",".LD.txt",MYINPUT)
 
@@ -39,7 +36,7 @@ SAVENAME= gsub (".txt",".LD.txt",MYINPUT)
 ############################################################################################################################################
 
 cat (paste0("... Loading file \n"))
-df <- fread (paste0(MYINPUT , ".txt"), sep = "\t", check.names = F, header =T)
+df <- fread (MYINPUT, sep = "\t", check.names = F, header =T) %>% as.data.frame
 
 ############################################################################################################################################
 #	computing LD														  
@@ -56,21 +53,21 @@ n = length(unique (df$SNVId))
 regions = unique (df$SNVId)
 
 for (i in 1:length(regions)) {
-	# select genotypes for STR and a particular SNVs and convert genotypes into alternate allele dosages
-	x <- df %>% filter (df$SNVId == regions[i] ) %>% 
-		mutate (value = ifelse (x$value == "./.",NA,ifelse (
-							x$value =="0/0",0,ifelse (
-							x$value =="0/1",1,ifelse (
-							x$value =="1/1",2,NA)))) )
+	# select genotypes for a given SNVs and convert genotypes into alternate allele dosages
+	x <- df %>% filter (SNVId == regions[i] ) %>% 
+		mutate (value = ifelse (value == "./.",NA,ifelse (
+								value =="0/0",0,ifelse (
+								value =="0/1",1,ifelse (
+								value =="1/1",2,NA)))) )
 	
-	tobj = try (fit <- summary(lm(avg_repeats ~ value , data=x)))
+	tobj = try (fit <- summary(lm(avg_repeats ~ value, data=x)))
 	if (is(tobj,"try-error")) 
 	{
 		LinRegP <- NA
 		Rsq     <- NA
 		Slope   <- NA
 		Pair.obs <- nrow (x %>% filter (!is.na(value)) %>% filter (!is.na(avg_repeats )))
-	}else {	
+	} else {	
 		LinRegP  <- scientific (glance(fit)$p.value,digits = 5)
 		Rsq      <- round(glance(fit)$r.squared,4)   #ow much variation of the dependent variable is explained by a modelcor
 		Slope    <- round(fit$coefficients [,"Estimate"]["value"] ,6)
@@ -86,4 +83,3 @@ for (i in 1:length(regions)) {
 }	
 
 cat (paste0( "The end\n"))
-
