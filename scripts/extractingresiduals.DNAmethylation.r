@@ -1,5 +1,7 @@
+
+
 cat (paste0("\n", Sys.Date(),"\n"))
-cat(paste0("R version: ",getRversion()),"\n")
+cat (paste0("R version: ",getRversion(),"\n"))
 
 ############################################################################################################################################
 #	Loading libraries
@@ -12,7 +14,6 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(scales))
 suppressPackageStartupMessages(library(argparse))
 suppressPackageStartupMessages(library(stats))
-suppressPackageStartupMessages(library(bedr))
 
 #############################################################
 #	Set variables 
@@ -27,9 +28,9 @@ args <- parser$parse_args()
 
 # set variables 
 cat (paste0("Arguments:\n"))
-MYDIR = args$directory;cat (paste0(" \tWorking directory): ", MYDIR, "\n"))
-MYSUFIX = args$directory;cat (paste0(" \tSufix): ", MYSUFIX, "\n"))
-MYCHROM = args$chr; cat (paste0(" \tchromosome: ", MYCHROM, "\n"))
+MYDIR = args$directory;cat (paste0(" \tWorking directory: ", MYDIR, "\n"))
+MYSUFIX = args$directory;cat (paste0(" \tSufix: ", MYSUFIX, "\n"))
+MYCHROM = args$chr; cat (paste0(" \tChromosome: ", MYCHROM, "\n"))
 
 DIROUT = paste0(MYDIR, "/Residuals/"); if (!file.exists(DIROUT)){dir.create(DIROUT)} 
 MYFILE = paste(MYCHROM,MYSUFIX,"txt", sep = ".")
@@ -42,15 +43,15 @@ MYOUTPUT = paste(MYCHROM,MYSUFIX,"residuals.txt", sep = ".")
 
 setwd(MYDIR)
 cat(paste0 (" ... Loading file containing methyaltion data (ProbeIds in rows and samples in columns) ... \n"))
-df <- fread (MYFILE, sep ="\t", check.names = F, header = T)) %>% as.data.frame %>%		
+df <- fread (MYFILE, sep ="\t", check.names = F, header = T) %>% as.data.frame %>%		
 			select (ProbeID, <COLUMNS CONTAINING DATA>) %>% 
 			tibble::column_to_rownames ("ProbeID") 
 
 cat(paste0 (" ... Loading metadata file ... \n"))
 metadata <- fread ("Metadata.txt", sep ="\t", check.names = F, header = T) %>% as.data.frame # file containing metadata, i.e, PCs, age, gender, diagnosis status, ... where each row correspond to an individual sample 	 
-
+rownames (metadata) = metadata$sampleId
 #############################################################
-#	Aim
+#	Extracting residuals
 #############################################################
 
 if (file.exists(MYOUTPUT  )) { unlink (MYOUTPUT  ) } 	
@@ -58,12 +59,12 @@ for (i in 1:nrow(df)) {
 	x<- df[i,]
 	CpG <- rownames(x) 
 	x <- t(x)
-	y = merge (x, metadata , by ="row.names")
+	y = merge (x, metadata , by ="row.names")  # merge by sampleId
 	colnames(y)[2] <- "betas"
 	tobj = try (fit <- summary(lm(betas ~ cov1 + cov2 + cov3 + ... , data = y)),silent=TRUE)	
 	if(is(tobj,"try-error")) 
 	{
-		cat ("error                  \t")
+		cat ("error\t")
 		res <- rep (NA,nrow(y))
 		names(res) <- y$Row.names
 		res <- t(res); res <- cbind (ProbeID = CpG, res)
